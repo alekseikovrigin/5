@@ -64,6 +64,6 @@ func castV(src interface{}, dest reflect.Value) {
 	}
 }
 
-func cast(SrcV interface{}, v interface{}) {
+func Cast(SrcV interface{}, v interface{}) {
 	castV(SrcV, reflect.ValueOf(v))
 }
