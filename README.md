@@ -27,7 +27,7 @@ type City struct {
 	Title string `out:"Certificate.CityOfBirth.Name"`
 }
 ```
-Required fields are specified using tags
+Required fields are specified using tags or taken with a matching name from the same nesting level
 
 ```go
 UserFromDB := User{
