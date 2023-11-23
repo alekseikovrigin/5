@@ -15,6 +15,31 @@ type TestStructB struct {
 	Field2 int    `out:"Field2"`
 }
 
+type User struct {
+	ID          int
+	Name        string
+	Surname     string
+	Certificate Passport
+}
+type Passport struct {
+	Serial      string
+	CityOfBirth CityOfBirth
+}
+type CityOfBirth struct {
+	Name string
+}
+
+type UserToReport struct {
+	UID  int
+	Name string
+	G    string
+	From City
+}
+
+type City struct {
+	Title string `out:"Certificate.CityOfBirth.Name"`
+}
+
 type I interface{}
 
 type A struct {
@@ -42,6 +67,36 @@ func TestCastVBasic(t *testing.T) {
 	castV(srcV.Interface(), destV)
 
 	if dest.Field1 != src.Field1 || dest.Field2 != src.Field2 {
+		t.Errorf("castV did not copy struct fields correctly")
+	}
+}
+
+func TestCastVBasic2(t *testing.T) {
+	src := User{
+		ID:      12,
+		Name:    "Aleksei",
+		Surname: "Kovrigin",
+		Certificate: Passport{
+			Serial: "DF374-23479",
+			CityOfBirth: CityOfBirth{
+				Name: "Kirov",
+			},
+		},
+	}
+
+	As := City{Title: ""}
+	dest := UserToReport{
+		UID:  13,
+		Name: "",
+		From: As,
+	}
+
+	srcV := reflect.ValueOf(&src)
+	destV := reflect.ValueOf(&dest)
+
+	castV(srcV.Interface(), destV)
+
+	if dest.From.Title != src.Certificate.CityOfBirth.Name {
 		t.Errorf("castV did not copy struct fields correctly")
 	}
 }
